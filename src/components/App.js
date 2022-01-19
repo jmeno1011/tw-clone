@@ -14,12 +14,12 @@ function App() {
       } else {
         setIsLoggedIn(false);
       }
-      // setInit(true);
+      setInit(true);
     });
   }, []);
   return (
     <>
-      <AppRouter isLoggedIn={isLoggedIn} />
+      {init ? <AppRouter isLoggedIn={isLoggedIn} /> : "Initializing...."}
       <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
     </>
   );
