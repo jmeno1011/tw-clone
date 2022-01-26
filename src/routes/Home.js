@@ -16,6 +16,7 @@ import { useState } from "react/cjs/react.development";
 function Home({ userObj }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
+  const [attachment, setAttachment] = useState();
 
   useEffect(() => {
     const querys = query(
@@ -47,6 +48,24 @@ function Home({ userObj }) {
     setNweet(value);
   };
 
+  const onFileChange = (e) => {
+    const {
+      target: { files },
+    } = e;
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishevent) => {
+      console.log(finishevent);
+      const {
+        currentTarget: { result },
+      } = finishevent;
+      setAttachment(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+  const onClearAttachment = () => {
+    setAttachment(null);
+  };
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -57,7 +76,14 @@ function Home({ userObj }) {
           onChange={onChange}
           value={nweet}
         />
+        <input type={"file"} accept="image/*" onChange={onFileChange} />
         <input type={"submit"} value={"Nweet"} />
+        {attachment && (
+          <div>
+            <img src={attachment} width={"50px"} height={"50px"} />
+            <button onClick={onClearAttachment}>Clear</button>
+          </div>
+        )}
       </form>
       <div>
         {nweets.map((nweet, index) => (
